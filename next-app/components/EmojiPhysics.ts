@@ -114,6 +114,7 @@ export async function createEmojiPhysics(
       const B = pair.bodyB as Matter.Body & { tier?: number };
       if (A.tier === undefined || B.tier === undefined) continue;
       if (A.tier !== B.tier) continue;
+      if (A.tier === 8) continue; // Super Crystals cannot merge
       if (processed.has(A) || processed.has(B)) continue;
       const speed = Math.hypot(
         A.velocity.x - B.velocity.x,
@@ -176,6 +177,7 @@ export async function createEmojiPhysics(
 }
 
 export function tierRadius(tier: number) {
-  return 14 + tier * 4;
+  const base = 14 + tier * 4;
+  return tier === 8 ? base * 1.5 : base;
 }
 
