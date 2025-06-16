@@ -107,7 +107,7 @@ export async function createEmojiPhysics(
     onMerge(tier);
   }
 
-  Events.on(engine, "collisionStart", (e) => {
+  Events.on(engine, "collisionActive", (e) => {
     const processed = new Set<Matter.Body>();
     for (const pair of e.pairs) {
       const A = pair.bodyA as Matter.Body & { tier?: number };
@@ -149,7 +149,10 @@ export async function createEmojiPhysics(
   function checkOver() {
     if (!bodies.length) return;
     for (const b of bodies) {
-      if (b.body.position.y - tierRadius(b.tier) <= 0) {
+      if (
+        b.body.position.y - tierRadius(b.tier) <= 0 &&
+        Math.abs(b.body.velocity.y) < 0.2
+      ) {
         onGameOver();
         return;
       }
