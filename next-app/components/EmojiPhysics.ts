@@ -29,8 +29,9 @@ export async function createEmojiPhysics(
   const { Engine, World, Bodies, Body, Runner, Events, Vector } = Matter;
   const engine = Engine.create();
   const runner = Runner.create();
-  const width = container.clientWidth;
-  const height = container.clientHeight;
+  const rect = container.getBoundingClientRect();
+  const width = rect.width;
+  const height = rect.height;
 
   const walls = [
     Bodies.rectangle(width / 2, -25, width, 50, { isStatic: true }),
@@ -143,8 +144,9 @@ export async function createEmojiPhysics(
   }
 
   function checkOver() {
+    if (!bodies.length) return;
     for (const b of bodies) {
-      if (b.body.position.y - tierRadius(b.tier) < 0) {
+      if (b.body.position.y - tierRadius(b.tier) <= 0) {
         onGameOver();
         return;
       }
