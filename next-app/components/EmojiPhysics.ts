@@ -107,6 +107,14 @@ export async function createEmojiPhysics(
     onMerge(tier);
   }
 
+  const MERGE_SPEED = 1.5;
+  const MERGE_FRAMES = 3;
+  const mergeTimers = new Map<string, number>();
+
+  function pairKey(a: Matter.Body, b: Matter.Body) {
+    return a.id < b.id ? `${a.id}-${b.id}` : `${b.id}-${a.id}`;
+  }
+
   Events.on(engine, "collisionActive", (e) => {
     const processed = new Set<Matter.Body>();
     for (const pair of e.pairs) {
@@ -120,15 +128,29 @@ export async function createEmojiPhysics(
         A.velocity.x - B.velocity.x,
         A.velocity.y - B.velocity.y
       );
-      if (speed < 1.5) {
-        const ea = bodies.find((b) => b.body === A);
-        const eb = bodies.find((b) => b.body === B);
-        if (ea && eb) {
-          merge(ea, eb);
-          processed.add(A);
-          processed.add(B);
+      const key = pairKey(A, B);
+      if (speed < MERGE_SPEED) {
+        const time = mergeTimers.get(key) ?? 0;
+        mergeTimers.set(key, time + 1);
+        if (time + 1 >= MERGE_FRAMES) {
+          const ea = bodies.find((b) => b.body === A);
+          const eb = bodies.find((b) => b.body === B);
+          if (ea && eb) {
+            merge(ea, eb);
+            processed.add(A);
+            processed.add(B);
+          }
+          mergeTimers.delete(key);
         }
+      } else {
+        mergeTimers.delete(key);
       }
+    }
+  });
+
+  Events.on(engine, "collisionEnd", (e) => {
+    for (const pair of e.pairs) {
+      mergeTimers.delete(pairKey(pair.bodyA, pair.bodyB));
     }
   });
 
