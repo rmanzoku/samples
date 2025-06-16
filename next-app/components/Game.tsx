@@ -97,7 +97,10 @@ export default function Game() {
       <div
         ref={boardRef}
         className="board"
-        onPointerDown={(e) => drop(e.nativeEvent.offsetX)}
+        onPointerDown={(e) => {
+          const rect = e.currentTarget.getBoundingClientRect();
+          drop(e.clientX - rect.left);
+        }}
         onTouchStart={(e) => {
           const rect = e.currentTarget.getBoundingClientRect();
           drop(e.touches[0].clientX - rect.left);
