@@ -128,9 +128,9 @@ export async function createEmojiPhysics(
 
   function update() {
     for (const eb of bodies) {
-      eb.el.style.transform = `translate(${eb.body.position.x - tierRadius(eb.tier)}px, ${
-        height - (eb.body.position.y + tierRadius(eb.tier))
-      }px)`;
+      eb.el.style.transform = `translate(${
+        eb.body.position.x - tierRadius(eb.tier)
+      }px, ${eb.body.position.y - tierRadius(eb.tier)}px)`;
     }
   }
 
@@ -139,7 +139,7 @@ export async function createEmojiPhysics(
     const top = Math.min(
       ...bodies.map((b) => b.body.position.y - tierRadius(b.tier))
     );
-    return 1 - top / height;
+    return (height - top) / height;
   }
 
   function checkOver() {

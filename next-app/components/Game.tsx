@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { createEmojiPhysics, type PhysicsHandle } from "./EmojiPhysics";
+import { createEmojiPhysics, TIERS, type PhysicsHandle } from "./EmojiPhysics";
 import "../styles/game.css";
 
 export default function Game() {
@@ -10,15 +10,18 @@ export default function Game() {
   const [score, setScore] = useState(0);
   const [progress, setProgress] = useState(0);
   const [over, setOver] = useState(false);
+  const [nextTier, setNextTier] = useState(0);
 
   // daily seed rng
   const rng = useRef<() => number>(() => 0);
   useEffect(() => {
     let seed = Number(new Date().toISOString().slice(0, 10).replace(/-/g, ""));
-    rng.current = () => {
+    const rand = () => {
       seed = (seed * 9301 + 49297) % 233280;
       return seed / 233280;
     };
+    rng.current = rand;
+    setNextTier(Math.floor(rand() * 8));
   }, []);
 
   useEffect(() => {
@@ -53,15 +56,17 @@ export default function Game() {
 
   const drop = (x: number) => {
     if (!physics.current || over) return;
-    const tier = Math.floor(rng.current() * 8);
+    const tier = nextTier;
     setScore((s) => s + 10 * tier);
     physics.current.drop(tier, x);
+    setNextTier(Math.floor(rng.current() * 8));
   };
 
   const reset = () => {
     physics.current?.cleanup();
     setScore(0);
     setOver(false);
+    setNextTier(Math.floor(rng.current() * 8));
     if (boardRef.current) {
       createEmojiPhysics(
         boardRef.current,
@@ -81,6 +86,7 @@ export default function Game() {
     <div className="game-wrapper">
       <header className="header">
         <span>🏅 {score}</span>
+        <span className="next">{TIERS[nextTier]}</span>
         <div className="progress">
           <div
             className="progress-inner"

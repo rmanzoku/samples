@@ -17,6 +17,10 @@
   font-size: 14px;
 }
 
+.next {
+  font-size: 20px;
+}
+
 .progress {
   width: 40%%;
   height: 4px;
@@ -32,8 +36,8 @@
 }
 
 .board {
-  width: 90vw;
-  max-width: 360px;
+  width: 95vw;
+  max-width: 420px;
   aspect-ratio: 1 / 1;
   background: #111;
   margin: 0 auto;
