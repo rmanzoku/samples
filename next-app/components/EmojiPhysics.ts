@@ -64,6 +64,8 @@ export async function createEmojiPhysics(
     const typed = body as Matter.Body & { tier: number };
     typed.tier = tier;
     const el = makeEl(tier);
+    el.style.left = `${x}px`;
+    el.style.top = `${r}px`;
     bodies.push({ body: typed, el, tier });
     World.add(engine.world, body);
   }
@@ -80,6 +82,8 @@ export async function createEmojiPhysics(
     const typed = body as Matter.Body & { tier: number };
     typed.tier = tier;
     const el = makeEl(tier);
+    el.style.left = `${x}px`;
+    el.style.top = `${y}px`;
     bodies.push({ body: typed, el, tier });
     World.add(engine.world, body);
   }
@@ -129,9 +133,8 @@ export async function createEmojiPhysics(
 
   function update() {
     for (const eb of bodies) {
-      eb.el.style.transform = `translate(${
-        eb.body.position.x - tierRadius(eb.tier)
-      }px, ${eb.body.position.y - tierRadius(eb.tier)}px)`;
+      eb.el.style.left = `${eb.body.position.x}px`;
+      eb.el.style.top = `${eb.body.position.y}px`;
     }
   }
 
