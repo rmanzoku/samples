@@ -1,4 +1,4 @@
-.suika-page {
+.suika-game {
     margin: 0;
     font-family: sans-serif;
     background-color: #f5f0e6;
@@ -9,21 +9,21 @@
     height: 100vh;
 }
 
-.suika-page .game-wrapper {
+.suika-game .game-wrapper {
     width: 320px;
     height: 600px;
     margin-top: 20px;
     position: relative;
 }
 
-.suika-page .scoreboard {
+.suika-game .scoreboard {
     display: flex;
     justify-content: center;
     gap: 16px;
     margin-bottom: 16px;
 }
 
-.suika-page .bubble {
+.suika-game .bubble {
     width: 60px;
     height: 60px;
     border-radius: 50%;
@@ -35,12 +35,11 @@
     font-weight: bold;
 }
 
-.suika-page .bubble--next .icon::before {
-    content: "\1F353";
+.suika-game .bubble--next .icon {
     font-size: 24px;
 }
 
-.suika-page .glass-box {
+.suika-game .glass-box {
     width: 300px;
     height: 400px;
     margin: 0 auto;
@@ -51,7 +50,7 @@
     position: relative;
 }
 
-.suika-page .fruit {
+.suika-game .fruit {
     width: 40px;
     height: 40px;
     border-radius: 50%;
@@ -64,14 +63,14 @@
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
-.suika-page .fruit--watermelon { background-color: #FF4B4B; }
-.suika-page .fruit--strawberry { background-color: #FF6677; }
-.suika-page .fruit--orange { background-color: #FFA433; }
-.suika-page .fruit--grape { background-color: #AA55FF; }
-.suika-page .fruit--lemon { background-color: #FFEE66; color: #333; }
+.suika-game .fruit--watermelon { background-color: #FF4B4B; }
+.suika-game .fruit--strawberry { background-color: #FF6677; }
+.suika-game .fruit--orange { background-color: #FFA433; }
+.suika-game .fruit--grape { background-color: #AA55FF; }
+.suika-game .fruit--lemon { background-color: #FFEE66; color: #333; }
 
-.suika-page .fruit--watermelon::before { content: "\1F349"; }
-.suika-page .fruit--strawberry::before { content: "\1F353"; }
-.suika-page .fruit--orange::before { content: "\1F34A"; }
-.suika-page .fruit--grape::before { content: "\1F347"; }
-.suika-page .fruit--lemon::before { content: "\1F34B"; }
+.suika-game .fruit--watermelon::before { content: "\1F349"; }
+.suika-game .fruit--strawberry::before { content: "\1F353"; }
+.suika-game .fruit--orange::before { content: "\1F34A"; }
+.suika-game .fruit--grape::before { content: "\1F347"; }
+.suika-game .fruit--lemon::before { content: "\1F34B"; }
