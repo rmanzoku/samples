@@ -37,7 +37,7 @@
 
 .board {
   width: 95vw;
-  max-width: 420px;
+  max-width: 600px;
   aspect-ratio: 1 / 1;
   background: #111;
   margin: 0 auto;
