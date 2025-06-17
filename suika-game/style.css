@@ -1,0 +1,78 @@
+body {
+    margin: 0;
+    font-family: sans-serif;
+    background-color: #f5f0e6;
+    background-image: repeating-linear-gradient(45deg, #f5f0e6 0, #f5f0e6 20px, #e9e0d1 20px, #e9e0d1 40px);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    height: 100vh;
+}
+
+.game-wrapper {
+    width: 320px;
+    height: 600px;
+    margin-top: 20px;
+    position: relative;
+}
+
+.scoreboard {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.bubble {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.9), rgba(255,255,255,0.6));
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #333;
+    font-weight: bold;
+}
+
+.bubble--next .icon::before {
+    content: "\1F353";
+    font-size: 24px;
+}
+
+.glass-box {
+    width: 300px;
+    height: 400px;
+    margin: 0 auto;
+    background: rgba(255,255,255,0.2);
+    border: 2px solid rgba(255,255,255,0.5);
+    border-radius: 8px;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
+    position: relative;
+}
+
+.fruit {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    font-size: 24px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.fruit--watermelon { background-color: #FF4B4B; }
+.fruit--strawberry { background-color: #FF6677; }
+.fruit--orange { background-color: #FFA433; }
+.fruit--grape { background-color: #AA55FF; }
+.fruit--lemon { background-color: #FFEE66; color: #333; }
+
+.fruit--watermelon::before { content: "\1F349"; }
+.fruit--strawberry::before { content: "\1F353"; }
+.fruit--orange::before { content: "\1F34A"; }
+.fruit--grape::before { content: "\1F347"; }
+.fruit--lemon::before { content: "\1F34B"; }
+
