@@ -99,11 +99,10 @@ export default function Game() {
         className="board"
         onPointerDown={(e) => {
           const rect = e.currentTarget.getBoundingClientRect();
+          // Use pointer events for both mouse and touch to avoid duplicate
+          // drops that can occur when `touchstart` and `pointerdown` fire
+          // together on mobile browsers.
           drop(e.clientX - rect.left);
-        }}
-        onTouchStart={(e) => {
-          const rect = e.currentTarget.getBoundingClientRect();
-          drop(e.touches[0].clientX - rect.left);
         }}
       />
       {over && (
