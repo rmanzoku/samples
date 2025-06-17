@@ -11,6 +11,7 @@ export default function Game() {
   const physics = useRef<PhysicsHandle | null>(null);
   const [score, setScore] = useState(0);
   const [best, setBest] = useState(0);
+  const [progress, setProgress] = useState(0);
   const [over, setOver] = useState(false);
   const [nextTier, setNextTier] = useState(0);
 
@@ -60,6 +61,7 @@ export default function Game() {
     const step = () => {
       if (physics.current) {
         physics.current.update();
+        setProgress(physics.current.getHeight());
       }
       id = requestAnimationFrame(step);
     };
@@ -104,6 +106,12 @@ export default function Game() {
           <div className="bubble bubble--next">
             <span className="icon">{TIERS[nextTier]}</span>
           </div>
+        </div>
+        <div className="progress">
+          <div
+            className="progress-inner"
+            style={{ width: `${Math.min(progress * 100, 100)}%` }}
+          />
         </div>
         <div
           ref={boardRef}
