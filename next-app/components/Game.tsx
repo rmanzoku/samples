@@ -4,17 +4,20 @@ import Link from "next/link";
 import { createEmojiPhysics, TIERS, type PhysicsHandle } from "./EmojiPhysics";
 import "../styles/game.css";
 
+const BEST_KEY = "suika-best";
+
 export default function Game() {
   const boardRef = useRef<HTMLDivElement>(null);
   const physics = useRef<PhysicsHandle | null>(null);
   const [score, setScore] = useState(0);
-  const [progress, setProgress] = useState(0);
+  const [best, setBest] = useState(0);
   const [over, setOver] = useState(false);
   const [nextTier, setNextTier] = useState(0);
 
   // daily seed rng
   const rng = useRef<() => number>(() => 0);
   useEffect(() => {
+    setBest(Number(localStorage.getItem(BEST_KEY) || 0));
     let seed = Number(new Date().toISOString().slice(0, 10).replace(/-/g, ""));
     const rand = () => {
       seed = (seed * 9301 + 49297) % 233280;
@@ -23,6 +26,17 @@ export default function Game() {
     rng.current = rand;
     setNextTier(Math.floor(rand() * 8));
   }, []);
+
+  // update best score when game over
+  useEffect(() => {
+    if (over) {
+      setBest((b) => {
+        const next = Math.max(b, score);
+        localStorage.setItem(BEST_KEY, String(next));
+        return next;
+      });
+    }
+  }, [over, score]);
 
   useEffect(() => {
     if (!boardRef.current) return;
@@ -46,7 +60,6 @@ export default function Game() {
     const step = () => {
       if (physics.current) {
         physics.current.update();
-        setProgress(physics.current.getHeight());
       }
       id = requestAnimationFrame(step);
     };
@@ -83,37 +96,36 @@ export default function Game() {
   };
 
   return (
-    <div className="game-wrapper">
-      <header className="header">
-        <span>🏅 {score}</span>
-        <span className="next">{TIERS[nextTier]}</span>
-        <div className="progress">
-          <div
-            className="progress-inner"
-            style={{ width: `${Math.min(progress * 100, 100)}%` }}
-          />
+    <div className="suika-game">
+      <div className="game-wrapper">
+        <div className="scoreboard">
+          <div className="bubble bubble--best">{best}</div>
+          <div className="bubble bubble--score">{score}</div>
+          <div className="bubble bubble--next">
+            <span className="icon">{TIERS[nextTier]}</span>
+          </div>
         </div>
-      </header>
-      <div
-        ref={boardRef}
-        className="board"
-        onPointerDown={(e) => {
-          const rect = e.currentTarget.getBoundingClientRect();
-          // Use pointer events for both mouse and touch to avoid duplicate
-          // drops that can occur when `touchstart` and `pointerdown` fire
-          // together on mobile browsers.
-          drop(e.clientX - rect.left);
-        }}
-      />
+        <div
+          ref={boardRef}
+          className="board glass-box"
+          onPointerDown={(e) => {
+            const rect = e.currentTarget.getBoundingClientRect();
+            // Use pointer events for both mouse and touch to avoid duplicate
+            // drops that can occur when `touchstart` and `pointerdown` fire
+            // together on mobile browsers.
+            drop(e.clientX - rect.left);
+          }}
+        />
       {over && (
         <div className="modal">
           <p className="mb-2">Score: {score}</p>
           <button onClick={reset} className="mb-2">Restart</button>
         </div>
       )}
-      <footer className="footer">
-        © <Link href="/">Home</Link>
-      </footer>
+        <footer className="footer">
+          © <Link href="/">Home</Link>
+        </footer>
+      </div>
     </div>
   );
 }
