@@ -48,6 +48,7 @@ export async function createEmojiPhysics(
   }
 
   const bodies: EmojiBody[] = [];
+  let overFrames = 0;
 
   function makeEl(tier: number) {
     const el = document.createElement("span");
@@ -61,6 +62,9 @@ export async function createEmojiPhysics(
   function drop(tier: number, x: number) {
     const r = tierRadius(tier);
     const body = Bodies.circle(x, r, r, { restitution: 0.2, friction: 0.1 });
+    // give a nudge so the piece immediately falls, preventing a quick
+    // game-over when tapping rapidly
+    Body.setVelocity(body, { x: 0, y: 5 });
     const typed = body as Matter.Body & { tier: number };
     typed.tier = tier;
     const el = makeEl(tier);
@@ -170,15 +174,27 @@ export async function createEmojiPhysics(
   }
 
   function checkOver() {
-    if (!bodies.length) return;
+    if (!bodies.length) {
+      overFrames = 0;
+      return;
+    }
+    let touchingTop = false;
     for (const b of bodies) {
       if (
         b.body.position.y - tierRadius(b.tier) <= 0 &&
         Math.abs(b.body.velocity.y) < 0.2
       ) {
-        onGameOver();
-        return;
+        touchingTop = true;
+        break;
       }
+    }
+    if (touchingTop) {
+      overFrames++;
+      if (overFrames > 10) {
+        onGameOver();
+      }
+    } else {
+      overFrames = 0;
     }
   }
 
