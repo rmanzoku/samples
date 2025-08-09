@@ -12,7 +12,7 @@ export default function Home() {
           スイカゲームライク
         </Link>
         <Link
-          href="/monst-game/"
+          href="/monst-game"
           className="bg-blue-600 text-white px-4 py-2 rounded"
         >
           モンスト風ミニゲーム
